@@ -1,4 +1,4 @@
-package TicTacToe.src.main;
+package tictactoe.src.main;
 
 /**
  * A TicTacToe Object.
@@ -116,60 +116,81 @@ public class TicTacToe {
      * @return winning characeter, FILLED if grid is filled, 0 if no conditions are met
      */
     public char checkStatus(int row, int col) {
-        int left = 0;
-        int right = 0;
-        int up = 0;
-        int down = 0;
-        int upLeft = 0;
-        int upRight = 0;
-        int downLeft = 0;
-        int downRight = 0;
-        
-        for (int i = 0; i <= winCondition; i++) {
-            if ((col - i >= 0) && (grid[row][col-i] == grid[row][col])) {
-                left++;
+        char[] horizontal = new char[winCondition + (winCondition-1)];
+        char[] vertical = new char[winCondition + (winCondition-1)];
+        char[] leftDiagonal = new char[winCondition + (winCondition-1)];
+        char[] rightDiagonal = new char[winCondition + (winCondition-1)];
+
+        for (int i = winCondition-1; i >= 0; i--) {
+            //left horizontal
+            if (col - i >= 0) {
+                horizontal[winCondition - i - 1] = grid[row][col-i];
+            }
+
+            //upper vertical
+            if (row - i >= 0) {
+                vertical[winCondition - i - 1] = grid[row-i][col];
+            }
+
+            //upper left diagonal
+            if ((col - i >= 0) && (row - i >= 0)) {
+                leftDiagonal[winCondition - i - 1] = grid[row-i][col-i];
+            }
+
+            //lower right diagonal
+            if ((col - i >= 0) && (row + i < rows)) {
+                rightDiagonal[winCondition - i - 1] = grid[row+i][col-i];
             }
             
-            if ((col + i < cols) && (grid[row][col+i] == grid[row][col])) {
-                right++;
+
+            //right horizontal
+            if (col + i < cols) {
+                horizontal[winCondition + i - 1] = grid[row][col+i];
             }
-            
-            if ((row - i >= 0) && (grid[row-i][col] == grid[row][col])) {
-                up++;
+    
+            //lower vertical
+            if (row + i < rows) {
+                vertical[winCondition + i - 1] = grid[row+i][col];
             }
-            
-            if ((row + i < rows) && (grid[row+i][col] == grid[row][col])) {
-                down++;
+    
+            //lower left diagonal
+            if ((row + i < rows) && (col + i < cols)) {
+                leftDiagonal[winCondition + i - 1] = grid[row+i][col+i];
             }
-            
-            if ((row - i >= 0) && (col - i >= 0) && (grid[row-i][col-i] == grid[row][col])) {
-                upLeft++;
+    
+            //upper right diagonal
+            if ((row - i >= 0) && (col + i < cols)) {
+                rightDiagonal[winCondition + i - 1] = grid[row-i][col+i];
             }
-            
-            if ((row - i >= 0) && (col + i < cols) && (grid[row-i][col+i] == grid[row][col])) {
-                upRight++;
-            }
-            
-            if ((row + i < rows) && (col - i >= 0) && (grid[row+i][col-i] == grid[row][col])) {
-                downLeft++;
-            }
-            
-            if ((row + i < rows) && (col + i < cols) && (grid[row+i][col+i] == grid[row][col])) {
-                downRight++;
-            }
-            
         }
-        
-        if (left == winCondition) {return grid[row][col];}
-        else if (right == winCondition) {return grid[row][col];}
-        else if (up == winCondition) {return grid[row][col];}
-        else if (down == winCondition) {return grid[row][col];}
-        else if (upLeft == winCondition) {return grid[row][col];}
-        else if (upRight == winCondition) {return grid[row][col];}
-        else if (downLeft == winCondition) {return grid[row][col];}
-        else if (downRight == winCondition) {return grid[row][col];}
-        else if (checkFilled()) {return FILLED;}
+
+        if (matchWinCondition(horizontal, grid[row][col])) {return grid[row][col];}
+        else if (matchWinCondition(vertical, grid[row][col])) {return grid[row][col];}
+        else if (matchWinCondition(leftDiagonal, grid[row][col])) {return grid[row][col];}
+        else if (matchWinCondition(rightDiagonal, grid[row][col])) {return grid[row][col];}
         else {return 0;}
+    }
+
+    /**
+     * Checks if the array has consecutive characters.
+     * @param array character array
+     * @param verify character to check
+     * @return true: consecutive characters matches win condition | false: consecutive characters does not match win condition
+     */
+    private boolean matchWinCondition(char[] array, char verify) {
+        int consecutive = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == verify) {
+                consecutive++;
+            }
+
+            if (consecutive == winCondition) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -241,18 +262,18 @@ public class TicTacToe {
      */
     public String printPlayerGrid() {
         String gridString = "";
-        String rowLetters = "  ";
+        String rowLetters = "   ";
         String lineString = "";
-        for (int i = 0; i < getRows(); i++) {
+        for (int i = 0; i < cols; i++) {
             rowLetters += String.format(" %3c", i + 65);
         }
-        for (int i = 0; i < rowLetters.length() + 1; i++) {
+        for (int i = 0; i < rowLetters.length() + 2; i++) {
             lineString += "-";
         }
         gridString += String.format("%s\n%s\n", rowLetters, lineString);
         
-        for (int i = 0; i < getCols(); i++) {
-            String colString = String.format("%d | ", i + 1);
+        for (int i = 0; i < rows; i++) {
+            String colString = String.format("%2d | ", i + 1);
             for (int j = 0; j < getRows(); j++) {
                 colString += String.format("[%c] ", getChar(i, j));
             }
