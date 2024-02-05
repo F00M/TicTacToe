@@ -1,6 +1,8 @@
+package tictactoe.src.test;
+
 import java.util.Scanner;
 
-import TicTacToe.src.main.TicTacToe;
+import tictactoe.src.main.TicTacToe;
 
 public class Main {
     public static void main(String[] args) {
@@ -62,14 +64,26 @@ public class Main {
             String selection = "";
             System.out.print("Enter selection (Ex. A0): ");
             selection = in.nextLine();
-            row = selection.charAt(1) - '0' - 1;
-            col = selection.charAt(0) - 'A';
+            try {
+                row = Integer.valueOf(selection.substring(1)) - 1;
+                col = selection.charAt(0) - 'A';
+            } catch (Exception e) {
+                row = game.getRows();
+                col = game.getCols();
+            }
+            System.out.println(String.format("Row: %d, Col: %d", row, col));
                 
             while (!game.addSymbol(game.getSymbols()[turn], row, col)) {
                 System.out.print("Enter selection (Ex. A0): ");
                 selection = in.nextLine();
-                row = selection.charAt(1) - '0' - 1;
-                col = selection.charAt(0) - 'A';
+                try {
+                    row = Integer.valueOf(selection.substring(1)) - 1;
+                    col = selection.charAt(0) - 'A';
+                } catch (Exception e) {
+                    row = game.getRows();
+                    col = game.getCols();
+                }
+                System.out.println(String.format("Row: %d, Col: %d", row, col));
             }
 
             if (status == TicTacToe.FILLED) {
