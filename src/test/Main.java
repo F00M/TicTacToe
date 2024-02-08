@@ -66,30 +66,24 @@ public class Main {
             selection = in.nextLine();
             try {
                 row = Integer.valueOf(selection.substring(1)) - 1;
-                col = selection.charAt(0) - 'A';
+                col = selection.substring(0, 1).toUpperCase().charAt(0) - 'A';
             } catch (Exception e) {
                 row = game.getRows();
                 col = game.getCols();
             }
-            System.out.println(String.format("Row: %d, Col: %d", row, col));
+            //System.out.println(String.format("Row: %d, Col: %d", row, col));
                 
             while (!game.addSymbol(game.getSymbols()[turn], row, col)) {
                 System.out.print("Enter selection (Ex. A0): ");
                 selection = in.nextLine();
                 try {
                     row = Integer.valueOf(selection.substring(1)) - 1;
-                    col = selection.charAt(0) - 'A';
+                    col = selection.substring(0, 1).toUpperCase().charAt(0) - 'A';
                 } catch (Exception e) {
                     row = game.getRows();
                     col = game.getCols();
                 }
-                System.out.println(String.format("Row: %d, Col: %d", row, col));
-            }
-
-            if (status == TicTacToe.FILLED) {
-                System.out.println(game.printPlayerGrid());
-                System.out.println("Board filled! No one wins!");
-                break;
+                //System.out.println(String.format("Row: %d, Col: %d", row, col));
             }
 
             if (turn < game.getSymbols().length - 1) {
@@ -105,6 +99,10 @@ public class Main {
         if (status != TicTacToe.FILLED) {
             System.out.println("\n\n" + game.printPlayerGrid());
             System.out.println(String.format("\"%c\" has WON!!", status));
+        }
+        else if (status == TicTacToe.FILLED) {
+            System.out.println(game.printPlayerGrid());
+            System.out.println("Board filled! No one wins!");
         }
 
         in.close();
