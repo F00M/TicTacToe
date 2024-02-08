@@ -7,7 +7,7 @@ package tictactoe.src.main;
  * of players being 3 and the max being 10. Users are able to identify the number
  * specific number of symbols in a row before the game chooses a winner
  * @author Nahtann
- * @version 1.0
+ * @version 1.1
  */
 public class TicTacToe {
     /**
@@ -168,6 +168,7 @@ public class TicTacToe {
         else if (matchWinCondition(vertical, grid[row][col])) {return grid[row][col];}
         else if (matchWinCondition(leftDiagonal, grid[row][col])) {return grid[row][col];}
         else if (matchWinCondition(rightDiagonal, grid[row][col])) {return grid[row][col];}
+        else if (checkFilled()) {return FILLED;}
         else {return 0;}
     }
 
@@ -183,6 +184,9 @@ public class TicTacToe {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == verify) {
                 consecutive++;
+            }
+            else {
+                consecutive = 0;
             }
 
             if (consecutive == winCondition) {
